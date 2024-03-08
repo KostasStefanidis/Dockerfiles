@@ -1,0 +1,27 @@
+
+name: Build and Publish image to Dockerhub and Github Container Registry
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  push_to_ghcr:
+    name: Push Docker image to Github Container Registry
+    uses: KostasStefanidis/github-workflows/.github/workflows/docker_push.yaml@main
+    with:
+      image_name: "kostasstefanidis/github-workflows"
+      registry: ghcr.io
+    secrets:
+      username: ${{ github.actor }}
+      password: ${{ secrets.GITHUB_TOKEN }}
+  
+  push_to_dockerhub:
+    name: Push Docker image to Dockerhub
+    uses: KostasStefanidis/github-workflows/.github/workflows/docker_push.yaml@main
+    with:
+      image_name: "kostasstefanidis/github-workflows"
+      registry: "docker.io"
+    secrets:
+      username: ${{ secrets.DOCKERHUB_USERNAME }}
+      password: ${{ secrets.DOCKERHUB_PASSWORD }}
